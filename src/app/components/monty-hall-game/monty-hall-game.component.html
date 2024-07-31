@@ -1,0 +1,163 @@
+<div class="container">
+  <!-- Number of Rounds Section -->
+  <div class="row mt-4" *ngIf="showRounds">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-center">Monty Hall Game</h5>
+          <form
+            #roundsForm="ngForm"
+            autocomplete="off"
+            (ngSubmit)="onPlayClick()"
+          >
+            <div class="form-group">
+              <label for="numberOfRounds">Number of Rounds</label>
+              <input
+                type="number"
+                name="numberOfRounds"
+                id="numberOfRounds"
+                class="form-control"
+                [(ngModel)]="numberOfRounds"
+                required
+                min="1"
+                placeholder="Enter number of rounds"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="roundsForm.submitted && numberOfRounds <= 0"
+              >
+                Please enter a valid number of rounds (greater than zero).
+              </div>
+            </div>
+            <div class="d-grid gap-2 mt-3">
+              <button
+                class="btn btn-primary"
+                type="submit"
+                [disabled]="roundsForm.invalid"
+              >
+                Start Game
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="row mt-4" *ngIf="showForm">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-header text-center">
+          <h2>Monty Hall</h2>
+        </div>
+        <div class="card-body">
+          <form
+            #gameForm="ngForm"
+            autocomplete="off"
+            (ngSubmit)="onSubmit(gameForm)"
+          >
+            <div class="form-group">
+              <label for="InitialDoorSelection">Initial Door Selection</label>
+              <select
+                name="InitialDoorSelection"
+                id="InitialDoorSelection"
+                class="form-control"
+                [(ngModel)]="monty_hall.formData.InitialDoorSelection"
+                required
+              >
+                <option value="" disabled selected>Select a door</option>
+                <option value="1">Door 1</option>
+                <option value="2">Door 2</option>
+                <option value="3">Door 3</option>
+              </select>
+            </div>
+            <div class="form-group mt-3">
+              <label for="changedDoor"
+                >Would you like to change your choice?</label
+              >
+              <select
+                name="changedDoor"
+                id="changedDoor"
+                class="form-control"
+                [(ngModel)]="monty_hall.formData.ChangeDoor"
+                required
+              >
+                <option value="" disabled selected>Choose an option</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="d-grid gap-2 mt-3">
+              <button
+                class="btn btn-success"
+                type="submit"
+                [disabled]="gameForm.invalid"
+              >
+                Submit Choice
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Section -->
+  <div class="row mt-4" *ngIf="showResults">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-center">Game Results</h5>
+          <table
+            class="table table-bordered table-striped mt-2"
+            *ngIf="resultList.length > 0"
+          >
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Initial Selection</th>
+                <th>Revealed Door</th>
+                <th>Final Door</th>
+                <th>Prize Door</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let result of resultList; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ result.initialDoorSelection }}</td>
+                <td>{{ result.revealedDoor }}</td>
+                <td>{{ result.finalDoor }}</td>
+                <td>{{ result.correctDoor }}</td>
+                <td>
+                  <span
+                    [ngClass]="
+                      result.isWin ? 'badge bg-success' : 'badge bg-danger'
+                    "
+                  >
+                    {{ result.isWin ? "Yes" : "No" }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="text-center" *ngIf="resultList.length === 0">
+            Good Luck on your first attempt!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Play Again Button -->
+  <div class="row mt-4" *ngIf="showPlayBack">
+    <div class="col-md-6 offset-md-3">
+      <div class="d-grid gap-2">
+        <button class="btn btn-secondary" (click)="onPlayBackClick()">
+          Play Again
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
